@@ -1,5 +1,7 @@
 ﻿# 井字棋
-极大极小值算法
+极大极小值算法（minimax）和alpha-beta剪枝算法实现对战
+## 部分过程
+![](images/demo1.jpg)
 ## 演示
 X or O?o<br>
 012<br>
