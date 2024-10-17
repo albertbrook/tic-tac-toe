@@ -2,7 +2,7 @@ import random
 
 
 class Node:
-    def __init__(self, board):
+    def __init__(self, board, father_score=None):
         self.score = None
         self.nodes = []
 
@@ -11,6 +11,8 @@ class Node:
             return
 
         piece = 1 if board.count(0) % 2 else -1
+        self.score = -2 if piece == 1 else 2
+        father_score = father_score if father_score is not None else -1 * self.score
 
         for i in range(9):
             if board[i]:
@@ -18,10 +20,12 @@ class Node:
             else:
                 temp = board.copy()
                 temp[i] = piece
-                self.nodes.append(Node(temp))
-
-        scores = [node.score for node in self.nodes if node]
-        self.score = max(scores) if piece == 1 else min(scores)
+                self.nodes.append(Node(temp, self.score))
+                if piece == 1 and self.nodes[-1].score > self.score or piece == -1 and self.nodes[-1].score < self.score:
+                    self.score = self.nodes[-1].score
+                    # self.score == father_score，可剪更多枝，此时不会有更好的结果，但可能有更差的结果，取决于需要获取当前局面的什么信息
+                    if piece == 1 and self.score > father_score or piece == -1 and self.score < father_score:
+                        return
 
 
 def win(board):
